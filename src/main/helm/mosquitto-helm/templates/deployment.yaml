@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mosquitto-helm.fullname" . }}
+  labels:
+{{ include "mosquitto-helm.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "mosquitto-helm.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "mosquitto-helm.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: mqtt
+              containerPort: 1883
+            - name: websocket
+              containerPort: 9090
+      {{- if .Values.readinessProbe }}
+          readinessProbe:
+       {{- toYaml .Values.readinessProbe | nindent 12 }}
+      {{- end }}
+      {{- if .Values.livenessProbe }}
+          livenessProbe:
+        {{- toYaml .Values.livenessProbe | nindent 12 }}
+      {{- end }}
+          resources:
+      {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: mosquitto-conf
+            mountPath: /mosquitto/config/mosquitto.conf
+            subPath: mosquitto.conf
+            readOnly: true
+          - name: mosquitto-data
+            mountPath: /mosquitto/data
+            subPath: mosquitto/data
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+      - name: mosquitto-conf
+        configMap:
+          name: {{ template "mosquitto-helm.fullname" . }}-config
+      - name: mosquitto-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "mosquitto-helm.fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}
