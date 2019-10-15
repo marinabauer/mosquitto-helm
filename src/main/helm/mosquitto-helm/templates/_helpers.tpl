@@ -43,3 +43,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{/*
+If broker password is stored in a secret
+*/}}
+{{- define "mosquitto-helm.passwordSecret" -}}
+valueFrom:
+  secretKeyRef:
+{{- $passwordSecretName := required "Missing mandatory property 'password.secretName'" .Values.password.secretName }}
+    name: {{ $passwordSecretName }}
+    key: {{ required "Missing mandatory property 'password.secretKeyRef'" .Values.password.secretKeyRef }}
+{{- end }}

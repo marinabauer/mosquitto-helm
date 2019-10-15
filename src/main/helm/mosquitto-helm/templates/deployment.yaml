@@ -47,6 +47,12 @@ spec:
           - name: mosquitto-data
             mountPath: /mosquitto/data
             subPath: mosquitto/data
+        {{- if .Values.password.enabled }}
+          - name: passwd
+            mountPath: /etc/mosquitto/passwd
+            subPath: passwd
+            readOnly: true
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -63,6 +69,11 @@ spec:
       - name: mosquitto-conf
         configMap:
           name: {{ template "mosquitto-helm.fullname" . }}-config
+      {{- if .Values.password.enabled }}
+      - name: passwd
+        configMap:
+          name: mqtt-passwd
+      {{- end }}
       - name: mosquitto-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:

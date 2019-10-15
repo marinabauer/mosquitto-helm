@@ -48,5 +48,6 @@ affinity: {}
 
 config: {} #contains configuration options of the moquitto broker
 
-password: {} # password for the moquitto broker
-
+password: 
+  enabled: false # enable password for the moquitto broker
+  #value:  # if password set enabled to true: password for the moquitto broker
