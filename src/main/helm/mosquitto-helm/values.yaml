@@ -46,8 +46,8 @@ tolerations: []
 
 affinity: {}
 
-config: {} #contains configuration options of the moquitto broker
+config: {} #contains configuration options of the mosquitto broker
 
 password: 
-  enabled: false # enable password for the moquitto broker
-  #value:  # if password set enabled to true: password for the moquitto broker
+  enabled: false # enable password for the mosquitto broker
+  #value:  # if password set enabled to true: password for the mosquitto broker
