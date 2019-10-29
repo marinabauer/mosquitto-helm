@@ -48,5 +48,5 @@ affinity: {}
 
 config: {} #contains configuration options of the moquitto broker
 
-password: {} # password for the moquitto broker
+password: {} # password for the mosquitto broker
 
