@@ -10,7 +10,7 @@ image:
   pullPolicy: IfNotPresent
   pullSecrets: []
 
-nameOverride: "moquitto"
+nameOverride: "mosquitto"
 fullnameOverride: ""
 
 # TODO add useful probes
