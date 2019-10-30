@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mosquitto-helm.fullname" . }}
+  labels:
+{{ include "mosquitto-helm.labels" . | indent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 1883
+      name: headless
+  selector:
+    app.kubernetes.io/name: {{ include "mosquitto-helm.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
