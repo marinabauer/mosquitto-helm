@@ -18,4 +18,10 @@ spec:
   storageClassName: standard
 {{- end }}
 
+{{- if .Values.persistence.persistenceVolumeLabel }}
+  selector:
+    matchLabels:
+      volume: {{ .Values.persistence.persistenceVolumeLabel | quote }}
+{{- end }}
+
 {{- end }}

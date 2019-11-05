@@ -39,6 +39,7 @@ persistence:
     - ReadWriteOnce
   storageSize: 8Gi
   #storageClassName name of the storage class, default is standard
+  #persistenceVolumeLabel label of persistence volume to which attach pvc
 
 nodeSelector: {}
 
@@ -50,4 +51,3 @@ config: {} #contains configuration options of the mosquitto broker
 
 password: 
   enabled: false # enable password for the mosquitto broker
-  #value:  # if password set enabled to true: password for the mosquitto broker
