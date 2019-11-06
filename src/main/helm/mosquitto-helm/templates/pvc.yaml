@@ -7,10 +7,10 @@ metadata:
 {{ include "mosquitto-helm.labels" . | indent 4 }}
 spec:
   accessModes:
-    - {{ .Values.persistence.accessMode | quote }}
+{{ .Values.persistence.accessModes | toYaml | indent 4 }}
   resources:
     requests:
-      storage: {{ .Values.persistence.size | quote }}
+      storage: {{ .Values.persistence.storageSize | quote }}
 
 {{- if .Values.persistence.storageClassName }}
   storageClassName: {{ .Values.persistence.storageClassName | quote }}
